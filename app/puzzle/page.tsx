@@ -1,10 +1,10 @@
 // src/app/page.tsx
-import LandingPage from "./components/LandingPage";
+import CrosswordGame from '../components/CrosswordGame';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
-      <LandingPage />
+      <CrosswordGame />
     </main>
   );
 }
