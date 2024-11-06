@@ -1,7 +1,7 @@
 // src/components/CrosswordGrid.tsx
 'use client';
 
-import { useRef, KeyboardEvent, useState, useEffect } from 'react';
+import { useRef, KeyboardEvent, useState, useCallback, useEffect } from 'react';
 import { CrosswordCell, CrosswordClue } from '../types/types';
 
 interface CrosswordGridProps {
@@ -9,44 +9,22 @@ interface CrosswordGridProps {
   onCellChange: (x: number, y: number, value: string) => void;
   showAnswers: boolean;
   userAnswers: string[][];
-  clues: CrosswordClue[];
+  clues: CrosswordClue[]; // We'll remove this if it's not being used
 }
 
 export default function CrosswordGrid({ 
   grid, 
   onCellChange, 
   showAnswers,
-  userAnswers,
-  clues 
+  userAnswers
 }: CrosswordGridProps) {
   const inputRefs = useRef<(HTMLInputElement | null)[][]>(
     Array(12).fill(null).map(() => Array(12).fill(null))
   );
   const [currentDirection, setCurrentDirection] = useState<'across' | 'down'>('across');
   const [lastCellPosition, setLastCellPosition] = useState<{ x: number; y: number } | null>(null);
-  const [completionPercentage, setCompletionPercentage] = useState(0);
 
-  const calculateCompletionPercentage = () => {
-    let total = 0;
-    let correct = 0;
-
-    grid.forEach((row, y) => {
-      row.forEach((cell, x) => {
-        if (!cell.isBlank) {
-          total++;
-          if (userAnswers[y][x] === cell.letter) {
-            correct++;
-          }
-        }
-      });
-    });
-
-    setCompletionPercentage(Math.round((correct / total) * 100));
-  };
-
-  useEffect(() => {
-    calculateCompletionPercentage();
-  }, [userAnswers, grid]); // Added grid to dependencies
+  // Removing unused completionPercentage state and calculation
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>, x: number, y: number) => {
     const { key } = event;
