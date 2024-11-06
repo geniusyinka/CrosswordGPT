@@ -73,6 +73,12 @@ npm run dev
 
 **5. Open your browser and navigate to `http://localhost:3000`**
 
+## Screenshots
+
+![Screenshot 1](https://github.com/AkshataM17/ai-crossword-puzzle/blob/main/public/page1.png?raw=true)
+![Screenshot 2](https://github.com/AkshataM17/ai-crossword-puzzle/blob/main/public/page2.png?raw=true)
+![Screenshot 3](https://github.com/AkshataM17/ai-crossword-puzzle/blob/main/public/page3.png?raw=true)
+
 ## How to use the application
 
 1. Select a field of interest (Science, History, etc.)
