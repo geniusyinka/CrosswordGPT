@@ -1,7 +1,7 @@
 // src/components/CrosswordGrid.tsx
 'use client';
 
-import { useRef, KeyboardEvent, useState, useCallback, useEffect } from 'react';
+import { useRef, KeyboardEvent, useState } from 'react';
 import { CrosswordCell, CrosswordClue } from '../types/types';
 
 interface CrosswordGridProps {
@@ -9,7 +9,7 @@ interface CrosswordGridProps {
   onCellChange: (x: number, y: number, value: string) => void;
   showAnswers: boolean;
   userAnswers: string[][];
-  clues: CrosswordClue[]; // We'll remove this if it's not being used
+  clues: CrosswordClue[]; // Keeping interface complete for type safety
 }
 
 export default function CrosswordGrid({ 
@@ -23,8 +23,6 @@ export default function CrosswordGrid({
   );
   const [currentDirection, setCurrentDirection] = useState<'across' | 'down'>('across');
   const [lastCellPosition, setLastCellPosition] = useState<{ x: number; y: number } | null>(null);
-
-  // Removing unused completionPercentage state and calculation
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>, x: number, y: number) => {
     const { key } = event;
