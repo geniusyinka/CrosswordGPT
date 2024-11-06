@@ -1,3 +1,4 @@
+// app/components/ScoreDisplay.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -17,7 +18,6 @@ export default function ScoreDisplay({ score }: ScoreDisplayProps) {
   useEffect(() => {
     if (score) {
       setShow(true);
-      // Keep showing if it's 100%, otherwise hide after 3 seconds
       if (score.percentage !== 100) {
         const timer = setTimeout(() => setShow(false), 3000);
         return () => clearTimeout(timer);
@@ -51,7 +51,7 @@ export default function ScoreDisplay({ score }: ScoreDisplayProps) {
                 Congratulations!
               </h3>
               <p className="text-center text-gray-700">
-                You've solved the entire crossword correctly!
+                You&apos;ve solved the entire crossword correctly!
               </p>
             </>
           ) : (
@@ -90,7 +90,7 @@ export default function ScoreDisplay({ score }: ScoreDisplayProps) {
               </div>
               <div className="text-center">
                 <p className="text-gray-600">
-                  You've got <span className="font-bold text-blue-600">{score.correctCount}</span> out of <span className="font-bold">{score.total}</span> letters correct
+                  You&apos;ve got <span className="font-bold text-blue-600">{score.correctCount}</span> out of <span className="font-bold">{score.total}</span> letters correct
                 </p>
                 {score.correctWords.length > 0 && (
                   <div className="mt-2">

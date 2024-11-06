@@ -2,16 +2,14 @@
 'use client';
 
 import { useRef, KeyboardEvent, useState, useEffect } from 'react';
-import { CrosswordCell } from '../types/types';
-import WordFeedback from './WordFeedback';
-import ScoreDisplay from './ScoreDisplay';
+import { CrosswordCell, CrosswordClue } from '../types/types';
 
 interface CrosswordGridProps {
   grid: CrosswordCell[][];
   onCellChange: (x: number, y: number, value: string) => void;
   showAnswers: boolean;
   userAnswers: string[][];
-  clues: any[];
+  clues: CrosswordClue[];
 }
 
 export default function CrosswordGrid({ 
@@ -25,98 +23,35 @@ export default function CrosswordGrid({
     Array(12).fill(null).map(() => Array(12).fill(null))
   );
   const [currentDirection, setCurrentDirection] = useState<'across' | 'down'>('across');
-  const [feedback, setFeedback] = useState<{ word: string; isCorrect: boolean } | null>(null);
-  const [completionPercentage, setCompletionPercentage] = useState(0);
   const [lastCellPosition, setLastCellPosition] = useState<{ x: number; y: number } | null>(null);
+  const [completionPercentage, setCompletionPercentage] = useState(0);
 
-  useEffect(() => {
-    calculateCompletionPercentage();
-  }, [userAnswers]);
-
-  const calculateCorrectLetters = () => {
-    let correct = 0;
-    grid.forEach((row, y) => {
-      row.forEach((cell, x) => {
-        if (!cell.isBlank && userAnswers[y][x] === cell.letter) {
-          correct++;
-        }
-      });
-    });
-    return correct;
-  };
-
-  const calculateTotalLetters = () => {
+  const calculateCompletionPercentage = () => {
     let total = 0;
+    let correct = 0;
+
     grid.forEach((row, y) => {
       row.forEach((cell, x) => {
         if (!cell.isBlank) {
           total++;
+          if (userAnswers[y][x] === cell.letter) {
+            correct++;
+          }
         }
       });
     });
-    return total;
-  };
 
-  const getCorrectWords = () => {
-    const correctWords: string[] = [];
-    clues.forEach(clue => {
-      let isCorrect = true;
-      for (let i = 0; i < clue.answer.length; i++) {
-        const x = clue.direction === 'across' ? clue.startx + i : clue.startx;
-        const y = clue.direction === 'down' ? clue.starty + i : clue.starty;
-        if (userAnswers[y][x] !== grid[y][x].letter) {
-          isCorrect = false;
-          break;
-        }
-      }
-      if (isCorrect) {
-        correctWords.push(clue.answer);
-      }
-    });
-    return correctWords;
-  };
-
-  const checkWord = (x: number, y: number) => {
-    clues.forEach(clue => {
-      let word = '';
-      let correct = true;
-      let allFilled = true;
-      let cells: { x: number; y: number }[] = [];
-
-      for (let i = 0; i < clue.answer.length; i++) {
-        const checkX = clue.direction === 'across' ? clue.startx + i : clue.startx;
-        const checkY = clue.direction === 'down' ? clue.starty + i : clue.starty;
-        cells.push({ x: checkX, y: checkY });
-
-        if (!userAnswers[checkY][checkX]) {
-          allFilled = false;
-        } else {
-          word += userAnswers[checkY][checkX];
-          if (userAnswers[checkY][checkX] !== grid[checkY][checkX].letter) {
-            correct = false;
-          }
-        }
-      }
-
-      if (allFilled && cells.some(cell => cell.x === x && cell.y === y)) {
-        setFeedback({
-          word: clue.answer,
-          isCorrect: correct
-        });
-      }
-    });
-  };
-
-  const calculateCompletionPercentage = () => {
-    const correct = calculateCorrectLetters();
-    const total = calculateTotalLetters();
     setCompletionPercentage(Math.round((correct / total) * 100));
   };
 
+  useEffect(() => {
+    calculateCompletionPercentage();
+  }, [userAnswers, grid]); // Added grid to dependencies
+
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>, x: number, y: number) => {
-    if (showAnswers) return;
-    
     const { key } = event;
+
+    if (showAnswers) return;
 
     if (key === 'Tab') {
       event.preventDefault();
@@ -205,61 +140,48 @@ export default function CrosswordGrid({
       if (newX < 12 && newY < 12 && !grid[newY][newX].isBlank) {
         inputRefs.current[newY][newX]?.focus();
       }
-
-      setTimeout(() => checkWord(x, y), 100);
     }
   };
 
   return (
-    <div className="relative">
-      <div className="border-2 border-black rounded-lg overflow-hidden">
-        <div className="grid grid-cols-12 gap-0">
-          {grid.map((row, y) =>
-            row.map((cell, x) => (
-              <div
-                key={`${x}-${y}`}
-                className={`relative ${
-                  cell.isBlank ? 'bg-black' : 'bg-white'
-                }`}
-                style={{ width: '48px', height: '48px' }}
-              >
-                {!cell.isBlank && (
-                  <div className="w-full h-full border border-gray-300">
-                    {cell.number && (
-                      <span className="absolute top-0.5 left-1 text-xs font-black text-black z-10">
-                        {cell.number}
-                      </span>
-                    )}
-                    <input
-                      ref={el => inputRefs.current[y][x] = el}
-                      type="text"
-                      maxLength={1}
-                      readOnly={showAnswers}
-                      value={showAnswers ? cell.letter : userAnswers[y][x] || ''}
-                      className={`w-full h-full text-center uppercase bg-transparent focus:outline-none focus:bg-blue-50 
-                        text-xl font-bold text-black transition-colors
-                        ${showAnswers ? 'cursor-not-allowed bg-gray-50' : ''}
-                        ${lastCellPosition?.x === x && lastCellPosition?.y === y ? 'bg-blue-100' : ''}
-                        ${userAnswers[y][x] === cell.letter && userAnswers[y][x] ? 'text-green-600' : ''}`}
-                      onChange={(e) => handleInput(x, y, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(e, x, y)}
-                    />
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </div>
+    <div className="border-2 border-black rounded-lg overflow-hidden">
+      <div className="grid grid-cols-12 gap-0">
+        {grid.map((row, y) =>
+          row.map((cell, x) => (
+            <div
+              key={`${x}-${y}`}
+              className={`relative ${
+                cell.isBlank ? 'bg-black' : 'bg-white'
+              }`}
+              style={{ width: '48px', height: '48px' }}
+            >
+              {!cell.isBlank && (
+                <div className="w-full h-full border border-gray-300">
+                  {cell.number && (
+                    <span className="absolute top-0.5 left-1 text-xs font-black text-black z-10">
+                      {cell.number}
+                    </span>
+                  )}
+                  <input
+                    ref={el => inputRefs.current[y][x] = el}
+                    type="text"
+                    maxLength={1}
+                    readOnly={showAnswers}
+                    value={showAnswers ? cell.letter : userAnswers[y][x] || ''}
+                    className={`w-full h-full text-center uppercase bg-transparent focus:outline-none focus:bg-blue-50 
+                      text-xl font-bold text-black transition-colors
+                      ${showAnswers ? 'cursor-not-allowed bg-gray-50' : ''}
+                      ${lastCellPosition?.x === x && lastCellPosition?.y === y ? 'bg-blue-100' : ''}
+                      ${userAnswers[y][x] === cell.letter && userAnswers[y][x] ? 'text-green-600' : ''}`}
+                    onChange={(e) => handleInput(x, y, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(e, x, y)}
+                  />
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
-      {feedback && <WordFeedback word={feedback.word} isCorrect={feedback.isCorrect} />}
-      <ScoreDisplay 
-        score={completionPercentage > 0 ? {
-          percentage: completionPercentage,
-          correctCount: calculateCorrectLetters(),
-          total: calculateTotalLetters(),
-          correctWords: getCorrectWords()
-        } : null}
-      />
     </div>
   );
 }

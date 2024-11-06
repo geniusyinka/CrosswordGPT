@@ -1,7 +1,12 @@
-// src/app/page.tsx
-import CrosswordGame from '../components/CrosswordGame';
+'use client'
+import dynamic from 'next/dynamic';
 
-export default function Home() {
+// Import CrosswordGame with no SSR
+const CrosswordGame = dynamic(() => import('../components/CrosswordGame'), {
+  ssr: false
+});
+
+export default function Page() {
   return (
     <main className="min-h-screen bg-white">
       <CrosswordGame />

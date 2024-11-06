@@ -47,7 +47,7 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="p-6 border border-gray-200 rounded-lg hover:border-black transition-colors duration-200">
                 <h3 className="text-xl font-bold mb-4 text-gray-500">Adaptive Difficulty</h3>
-                <p className="text-gray-700">Our AI adjusts the puzzle's difficulty based on your progress, ensuring a challenging experience.</p>
+                <p className="text-gray-700">Our AI adjusts the puzzle&apos;s difficulty based on your progress, ensuring a challenging experience.</p>
               </div>
               <div className="p-6 border border-gray-200 rounded-lg hover:border-black transition-colors duration-200">
                 <h3 className="text-xl font-bold mb-4 text-gray-500">Interactive Hints</h3>

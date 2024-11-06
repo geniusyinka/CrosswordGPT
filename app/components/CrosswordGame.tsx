@@ -1,11 +1,30 @@
 // src/components/CrosswordGame.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { CrosswordCell, CrosswordClue } from '../types/types';
 import CrosswordGrid from './CrosswordGrid';
 import CluesList from './CluesList';
+import ScoreDisplay from './ScoreDisplay';
+import WordFeedback from './WordFeedback';
 import { generateGrid } from '@/utils/crosswordUtils';
+
+interface ApiClue {
+  clue: string;
+  answer: string;
+  direction: 'across' | 'down';
+}
+
+interface ApiResponse {
+  clues: ApiClue[];
+}
+
+interface Score {
+  percentage: number;
+  correctCount: number;
+  total: number;
+  correctWords: string[];
+}
 
 export default function CrosswordGame() {
   const [field, setField] = useState('');
@@ -17,12 +36,8 @@ export default function CrosswordGame() {
     Array(12).fill('').map(() => Array(12).fill(''))
   );
   const [showAnswers, setShowAnswers] = useState(false);
-  const [scoreDisplay, setScoreDisplay] = useState<{
-    percentage: number;
-    correctCount: number;
-    total: number;
-    correctWords: string[];
-  } | null>(null);
+  const [feedback, setFeedback] = useState<{ word: string; isCorrect: boolean } | null>(null);
+  const [currentScore, setCurrentScore] = useState<Score | null>(null);
 
   const fields = [
     'Science', 'History', 'Geography', 'Literature', 
@@ -34,7 +49,8 @@ export default function CrosswordGame() {
   const handleGenerate = async () => {
     setLoading(true);
     setShowAnswers(false);
-    setScoreDisplay(null);
+    setCurrentScore(null);
+    setFeedback(null);
     setUserAnswers(Array(12).fill('').map(() => Array(12).fill('')));
     
     try {
@@ -50,11 +66,13 @@ export default function CrosswordGame() {
         throw new Error('Failed to generate crossword');
       }
 
-      const data = await response.json();
+      const data = await response.json() as ApiResponse;
       
-      const numberedClues = data.clues.map((clue: any, index: number) => ({
+      const numberedClues = data.clues.map((clue: ApiClue, index: number) => ({
         ...clue,
         number: index + 1,
+        startx: 0,
+        starty: 0,
       }));
 
       setClues(numberedClues);
@@ -72,58 +90,86 @@ export default function CrosswordGame() {
     const newAnswers = [...userAnswers];
     newAnswers[y][x] = value.toUpperCase();
     setUserAnswers(newAnswers);
+    checkWordAtPosition(x, y);
+  };
+
+  const checkWordAtPosition = (x: number, y: number) => {
+    clues.forEach(clue => {
+      let word = '';
+      let isComplete = true;
+      const positions: Array<{ x: number; y: number }> = [];
+
+      for (let i = 0; i < clue.answer.length; i++) {
+        const checkX = clue.direction === 'across' ? clue.startx + i : clue.startx;
+        const checkY = clue.direction === 'down' ? clue.starty + i : clue.starty;
+        positions.push({ x: checkX, y: checkY });
+
+        if (!userAnswers[checkY][checkX]) {
+          isComplete = false;
+          break;
+        }
+        word += userAnswers[checkY][checkX];
+      }
+
+      if (isComplete && positions.some(pos => pos.x === x && pos.y === y)) {
+        const isCorrect = word === clue.answer;
+        setFeedback({
+          word: clue.answer,
+          isCorrect,
+        });
+      }
+    });
   };
 
   const checkAnswers = () => {
-    let correct = true;
     let total = 0;
     let correctCount = 0;
-    let correctWords: string[] = [];
+    const correctWords: string[] = [];
 
-    // Check complete words
+    // Utility function to validate coordinates
+    const isValidPosition = (x: number, y: number) => {
+      return x >= 0 && x < 12 && y >= 0 && y < 12 && !grid[y][x].isBlank;
+    };
+
     clues.forEach(clue => {
       let wordCorrect = true;
       const word = clue.answer;
       const startX = clue.startx;
       const startY = clue.starty;
 
+      let isValidWord = true;
       for (let i = 0; i < word.length; i++) {
         const x = clue.direction === 'across' ? startX + i : startX;
         const y = clue.direction === 'down' ? startY + i : startY;
 
-        if (!grid[y][x].isBlank) {
-          total++;
-          if (userAnswers[y][x] === grid[y][x].letter) {
-            correctCount++;
-          } else {
-            wordCorrect = false;
-            correct = false;
-          }
+        if (!isValidPosition(x, y)) {
+          isValidWord = false;
+          break;
+        }
+
+        total++;
+        if (userAnswers[y][x] === grid[y][x].letter) {
+          correctCount++;
+        } else {
+          wordCorrect = false;
         }
       }
 
-      if (wordCorrect && word.length > 0) {
+      if (isValidWord && wordCorrect && word.length > 0) {
         correctWords.push(word);
       }
     });
 
-    const percentage = Math.round((correctCount / total) * 100);
-    setScoreDisplay({
-      percentage,
-      correctCount,
-      total,
-      correctWords
-    });
+    if (total > 0) {
+      const percentage = Math.round((correctCount / total) * 100);
+      setCurrentScore({
+        percentage,
+        correctCount,
+        total,
+        correctWords
+      });
+    }
   };
-
-  useEffect(() => {
-    const handleCheckAnswers = () => {
-      checkAnswers();
-    };
-
-    window.addEventListener('checkAnswers', handleCheckAnswers);
-    return () => window.removeEventListener('checkAnswers', handleCheckAnswers);
-  }, [userAnswers, grid, clues]);
 
   return (
     <div className="p-6 md:p-8">
@@ -228,6 +274,9 @@ export default function CrosswordGame() {
             </div>
           </div>
         )}
+
+        {feedback && <WordFeedback word={feedback.word} isCorrect={feedback.isCorrect} />}
+        {currentScore && <ScoreDisplay score={currentScore} />}
       </div>
     </div>
   );
