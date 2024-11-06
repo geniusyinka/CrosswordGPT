@@ -9,7 +9,7 @@ interface CrosswordGridProps {
   onCellChange: (x: number, y: number, value: string) => void;
   showAnswers: boolean;
   userAnswers: string[][];
-  clues: CrosswordClue[]; // Keeping interface complete for type safety
+  clues: CrosswordClue[];
 }
 
 export default function CrosswordGrid({ 
@@ -18,11 +18,17 @@ export default function CrosswordGrid({
   showAnswers,
   userAnswers
 }: CrosswordGridProps) {
-  const inputRefs = useRef<(HTMLInputElement | null)[][]>(
+  const inputRefs = useRef<Array<Array<HTMLInputElement | null>>>(
     Array(12).fill(null).map(() => Array(12).fill(null))
   );
   const [currentDirection, setCurrentDirection] = useState<'across' | 'down'>('across');
   const [lastCellPosition, setLastCellPosition] = useState<{ x: number; y: number } | null>(null);
+
+  const setInputRef = (element: HTMLInputElement | null, y: number, x: number) => {
+    if (inputRefs.current) {
+      inputRefs.current[y][x] = element;
+    }
+  };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>, x: number, y: number) => {
     const { key } = event;
@@ -139,7 +145,7 @@ export default function CrosswordGrid({
                     </span>
                   )}
                   <input
-                    ref={el => inputRefs.current[y][x] = el}
+                    ref={(el) => setInputRef(el, y, x)}
                     type="text"
                     maxLength={1}
                     readOnly={showAnswers}
