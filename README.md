@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Crossword Generator
+
+An intelligent crossword puzzle generator that creates customized puzzles across various fields using AI. The application dynamically generates crossword puzzles with clues tailored to your chosen topic and difficulty level.
+
+## Table of Content
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [How to run the project](#how-to-run-the-project)
+- [How to use the application](#how-to-use-the-application)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Live Demo
+
+## Features
+
+- AI-powered puzzle generation
+- Multiple knowledge domains (Science, History, Literature, etc.)
+- Adjustable difficulty levels (Easy, Medium, Hard)
+- Interactive grid interface with keyboard navigation
+- Real-time answer validation
+- Score tracking and progress display
+- Responsive design for all devices
+- Clean, black and white UI
+
+## Technologies Used
+
+- Next.js 14 with App Router
+- Tailwind CSS for styling
+- TypeScript for type safety
+- OpenAI GPT API for puzzle generation
+- React for UI components
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js
+- OpenAI API key
+- npm or yarn
+
+### How to run the project
+
+**1. Clone the repository:**
+
+```bash
+git clone
+cd ai-crossword-generator
+```
+
+**2. Install dependencies:**
+
+```bash
+npm install
+```
+
+**3. Set up environment variables:**
+Create a `.env.local` file in the root directory and add:
+
+```
+OPENAI_API_KEY=your_openai_api_key
+```
+
+**4. Run the development server:**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**5. Open your browser and navigate to `http://localhost:3000`**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to use the application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Select a field of interest (Science, History, etc.)
+2. Choose your preferred difficulty level
+3. Click "Generate Crossword" to create a unique puzzle
+4. Use keyboard or mouse to navigate and fill in answers
+5. Use "Check Answers" to validate your progress
+6. View your score and completed words
+7. Use "Show Answers" if you need help
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Here's how you can help:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This project is licensed under the MIT License - see the [LICENSE](https://www.notion.so/0xmetaschool/LICENSE) file for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Acknowledgments
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- OpenAI for providing the GPT-3.5-mini API
+- The Chakra UI and Tailwind CSS team for their excellent React component library
+
+## Contact
+
+Please open an issue in the GitHub repository for any queries or support.
