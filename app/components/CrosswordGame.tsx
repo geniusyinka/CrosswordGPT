@@ -50,8 +50,8 @@ export default function CrosswordGame() {
       }
 
       const data = await response.json();
-      
-      const numberedClues = data.clues.map((clue: any, index: number) => ({
+
+      const numberedClues: CrosswordClue[] = data.clues.map((clue: { clue: string; answer: string; direction: 'across' | 'down' }, index: number) => ({
         ...clue,
         number: index + 1,
         startx: 0,
