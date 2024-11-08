@@ -1,14 +1,9 @@
-// src/app/layout.tsx
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import React from 'react'
+import Footer from './components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Crossword Generator',
-  description: 'Generate and solve crossword puzzles',
-}
 
 export default function RootLayout({
   children,
@@ -17,7 +12,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <React.StrictMode>
+            {children}
+            <Footer />
+        </React.StrictMode>
+      </body>
     </html>
   )
 }

@@ -6,7 +6,7 @@ export default function LandingPage() {
       <main className="bg-white">
         <nav className="bg-black text-white p-4">
           <div className="container mx-auto flex justify-between items-center">
-            <h1 className="text-2xl font-bold">AI Crossword Puzzle</h1>
+            <h1 className="text-2xl font-bold">CrosswordGPT</h1>
           </div>
         </nav>
   
@@ -41,7 +41,7 @@ export default function LandingPage() {
           </div>
         </section>
   
-        <section id="features" className="bg-white">
+        <section id="features" className="bg-white  pb-12">
           <div className="container mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12 text-gray-500">Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

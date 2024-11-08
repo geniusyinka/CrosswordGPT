@@ -1,4 +1,3 @@
-// src/components/CrosswordGame.tsx
 'use client';
 
 import { useState } from 'react';
@@ -9,35 +8,19 @@ import ScoreDisplay from './ScoreDisplay';
 import WordFeedback from './WordFeedback';
 import { generateGrid } from '@/utils/crosswordUtils';
 
-interface ApiClue {
-  clue: string;
-  answer: string;
-  direction: 'across' | 'down';
-}
-
-interface ApiResponse {
-  clues: ApiClue[];
-}
-
-interface Score {
-  percentage: number;
-  correctCount: number;
-  total: number;
-  correctWords: string[];
-}
-
 export default function CrosswordGame() {
   const [field, setField] = useState('');
   const [difficulty, setDifficulty] = useState('');
+  const [loading, setLoading] = useState(false);
   const [grid, setGrid] = useState<CrosswordCell[][]>([]);
   const [clues, setClues] = useState<CrosswordClue[]>([]);
-  const [loading, setLoading] = useState(false);
   const [userAnswers, setUserAnswers] = useState<string[][]>(
     Array(12).fill('').map(() => Array(12).fill(''))
   );
   const [showAnswers, setShowAnswers] = useState(false);
   const [feedback, setFeedback] = useState<{ word: string; isCorrect: boolean } | null>(null);
-  const [currentScore, setCurrentScore] = useState<Score | null>(null);
+  const [currentScore, setCurrentScore] = useState<{ percentage: number; correctCount: number; total: number; correctWords: string[] } | null>(null);
+  const [showGenerationUI, setShowGenerationUI] = useState(true);
 
   const fields = [
     'Science', 'History', 'Geography', 'Literature', 
@@ -66,9 +49,9 @@ export default function CrosswordGame() {
         throw new Error('Failed to generate crossword');
       }
 
-      const data = await response.json() as ApiResponse;
+      const data = await response.json();
       
-      const numberedClues = data.clues.map((clue: ApiClue, index: number) => ({
+      const numberedClues = data.clues.map((clue: any, index: number) => ({
         ...clue,
         number: index + 1,
         startx: 0,
@@ -78,6 +61,7 @@ export default function CrosswordGame() {
       setClues(numberedClues);
       const newGrid = generateGrid(numberedClues);
       setGrid(newGrid);
+      setShowGenerationUI(false);
     } catch (error) {
       console.error('Error generating crossword:', error);
       alert('Error generating crossword. Please try again.');
@@ -177,64 +161,66 @@ export default function CrosswordGame() {
         <h1 className="text-4xl font-bold text-center mb-10 text-black">
           Crossword Generator
         </h1>
-        
-        <div className="mb-10 max-w-2xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="space-y-2">
-              <label className="block text-base font-bold text-black mb-2">
-                Select Field
-              </label>
-              <select 
-                value={field}
-                onChange={(e) => setField(e.target.value)}
-                className="w-full p-3 border-2 border-gray-400 rounded-lg text-lg focus:border-black focus:ring-1 focus:ring-black font-medium text-black bg-white"
-              >
-                <option value="" className="text-gray-600">Choose a field...</option>
-                {fields.map(f => (
-                  <option key={f} value={f} className="text-black font-medium">
-                    {f}
-                  </option>
-                ))}
-              </select>
+
+        {showGenerationUI && (
+          <div className="mb-10 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="space-y-2">
+                <label className="block text-base font-bold text-black mb-2">
+                  Select Field
+                </label>
+                <select 
+                  value={field}
+                  onChange={(e) => setField(e.target.value)}
+                  className="w-full p-3 border-2 border-gray-400 rounded-lg text-lg focus:border-black focus:ring-1 focus:ring-black font-medium text-black bg-white"
+                >
+                  <option value="" className="text-gray-600">Choose a field...</option>
+                  {fields.map(f => (
+                    <option key={f} value={f} className="text-black font-medium">
+                      {f}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="block text-base font-bold text-black mb-2">
+                  Select Difficulty
+                </label>
+                <select
+                  value={difficulty}
+                  onChange={(e) => setDifficulty(e.target.value)}
+                  className="w-full p-3 border-2 border-gray-400 rounded-lg text-lg focus:border-black focus:ring-1 focus:ring-black font-medium text-black bg-white"
+                >
+                  <option value="" className="text-gray-600">Choose difficulty...</option>
+                  {difficulties.map(d => (
+                    <option key={d} value={d} className="text-black font-medium">
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             
-            <div className="space-y-2">
-              <label className="block text-base font-bold text-black mb-2">
-                Select Difficulty
-              </label>
-              <select
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value)}
-                className="w-full p-3 border-2 border-gray-400 rounded-lg text-lg focus:border-black focus:ring-1 focus:ring-black font-medium text-black bg-white"
-              >
-                <option value="" className="text-gray-600">Choose difficulty...</option>
-                {difficulties.map(d => (
-                  <option key={d} value={d} className="text-black font-medium">
-                    {d}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <button
+              onClick={handleGenerate}
+              disabled={!field || !difficulty || loading}
+              className="w-full bg-black text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  Generating...
+                  <svg className="animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                </span>
+              ) : (
+                'Generate Crossword'
+              )}
+            </button>
           </div>
-          
-          <button
-            onClick={handleGenerate}
-            disabled={!field || !difficulty || loading}
-            className="w-full bg-black text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                Generating...
-                <svg className="animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              </span>
-            ) : (
-              'Generate Crossword'
-            )}
-          </button>
-        </div>
+        )}
 
         {grid.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
