@@ -48,7 +48,7 @@ An intelligent crossword puzzle generator that creates customized puzzles across
 **1. Clone the repository:**
 
 ```bash
-git clone
+git clone https://github.com/0xmetaschool/ai-crossword-generator
 cd ai-crossword-generator
 ```
 
