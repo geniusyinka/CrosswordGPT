@@ -1,4 +1,4 @@
-# AI Crossword Generator
+# CrosswordGPT
 
 An intelligent crossword puzzle generator that creates customized puzzles across various fields using AI. The application dynamically generates crossword puzzles with clues tailored to your chosen topic and difficulty level.
 
