@@ -1,51 +1,29 @@
 # CrosswordGPT
+CrosswordGPT instantly turns any topic you love into fun crossword puzzles. Unlike regular crosswords that come ready-made, this app creates endless puzzles just for you, matching your interests and how hard you want them to be. It's like having a personal puzzle maker that knows exactly what you enjoy.
 
-An intelligent crossword puzzle generator that creates customized puzzles across various fields using AI. The application dynamically generates crossword puzzles with clues tailored to your chosen topic and difficulty level.
-
-## Table of Content
-
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [How to run the project](#how-to-run-the-project)
-- [How to use the application](#how-to-use-the-application)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+Built with Next.js and AI technology, this open-source template helps developers create their own puzzle apps. As more people look for smart ways to learn while having fun, this template lets you build your own crossword app quickly and easily.
 
 ## Live Demo
-Demo - https://crossword-gpt.vercel.app/
+[https://crossword-gpt.vercel.app/](https://crossword-gpt.vercel.app/)
 
 ## Features
-
 - AI-powered puzzle generation
 - Multiple knowledge domains (Science, History, Literature, etc.)
-- Adjustable difficulty levels (Easy, Medium, Hard)
 - Interactive grid interface with keyboard navigation
 - Real-time answer validation
-- Score tracking and progress display
-- Responsive design for all devices
-- Clean, black and white UI
 
 ## Technologies Used
 
-- Next.js 14 with App Router
-- Tailwind CSS for styling
-- TypeScript for type safety
-- OpenAI GPT API for puzzle generation
-- React for UI components
+- Next.js and React for Frontend and Backend
+- Tailwind CSS for Styling
+- OpenAI API for AI-Powered Features
 
-## Getting Started
+## Use Cases
+- Generate custom crosswords for any domain and test domain-specific knowledge.
+- Practice technical concepts and professional jargon through AI-generated puzzles with adjustable difficulty levels.
+- Utilize crossword puzzles for vocabulary building, exam preparation, or specialized field training.
 
-### Prerequisites
-
-- Node.js
-- OpenAI API key
-- npm or yarn
-
-### How to run the project
-
+## Installation Steps
 **1. Clone the repository:**
 
 ```bash
@@ -82,13 +60,12 @@ npm run dev
 
 ## How to use the application
 
-1. Select a field of interest (Science, History, etc.)
-2. Choose your preferred difficulty level
+1. Click on the "Play Crossword Puzzle" button on the Landing page
+2. Select a field of interest (Science, History, etc.) and the difficulty
 3. Click "Generate Crossword" to create a unique puzzle
-4. Use keyboard or mouse to navigate and fill in answers
-5. Use "Check Answers" to validate your progress
-6. View your score and completed words
-7. Use "Show Answers" if you need help
+4. Fill your answers and use "Check Answers" to validate your progress
+5. View your score and completed words
+6. Use "Show Answers" if you need help
 
 ## Contributing
 
@@ -102,12 +79,7 @@ Contributions are welcome! Here's how you can help:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://www.notion.so/0xmetaschool/LICENSE) file for details.
-
-## Acknowledgments
-
-- OpenAI for providing the GPT-3.5-mini API
-- The Chakra UI and Tailwind CSS team for their excellent React component library
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/0xmetaschool/CrosswordGPT/blob/main/LICENSE) file for details.
 
 ## Contact
 
