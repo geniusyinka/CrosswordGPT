@@ -54,9 +54,9 @@ npm run dev
 
 ## Screenshots
 
-![Screenshot 1](https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-landing-page.png?raw=true)
-![Screenshot 2](https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-home-page.png?raw=true)
-![Screenshot 3](https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-puzzle-page.png?raw=true)
+<img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-landing-page.png?raw=true" alt="CrosswordGPT Landing Page screenshot" width="400" height="300">
+<img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-home-page.png?raw=true" alt="CrosswordGPT Home Page screenshot" width="400" height="300">
+<img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-puzzle-page.png?raw=true" alt="CrosswordGPT Puzzle Page screenshot" width="400" height="300">
 
 ## How to use the application
 
