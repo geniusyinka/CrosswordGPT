@@ -75,9 +75,9 @@ npm run dev
 
 ## Screenshots
 
-![Screenshot 1](https://github.com/AkshataM17/ai-crossword-puzzle/blob/main/public/page1.png?raw=true)
-![Screenshot 2](https://github.com/AkshataM17/ai-crossword-puzzle/blob/main/public/page2.png?raw=true)
-![Screenshot 3](https://github.com/AkshataM17/ai-crossword-puzzle/blob/main/public/page3.png?raw=true)
+![Screenshot 1](https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-landing-page.png?raw=true)
+![Screenshot 2](https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-home-page.png?raw=true)
+![Screenshot 3](https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-puzzle-page.png?raw=true)
 
 ## How to use the application
 
