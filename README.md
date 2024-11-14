@@ -53,10 +53,14 @@ npm run dev
 **5. Open your browser and navigate to `http://localhost:3000`**
 
 ## Screenshots
+<div style="display: flex; justify-content: space-between; padding:20px;">
+  <img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-landing-page.png?raw=true" alt="CrosswordGPT Landing Page screenshot" style="width: 49%; border: 2px solid black;" />
+  <img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-home-page.png?raw=true" alt="CrosswordGPT Home Page screenshot" style="width: 49%; border: 2px solid black;" />
+</div>
+<div style="display: flex; justify-content: space-between;padding:20px;">
+  <img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-puzzle-page.png?raw=true" alt="CrosswordGPT Puzzle Page screenshot" style="width: 49%; border: 2px solid black;" />
+</div>
 
-<img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-landing-page.png?raw=true" alt="CrosswordGPT Landing Page screenshot" width="400" height="300">
-<img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-home-page.png?raw=true" alt="CrosswordGPT Home Page screenshot" width="400" height="300">
-<img src="https://github.com/0xmetaschool/CrosswordGPT/blob/main/public/crossword-gpt-puzzle-page.png?raw=true" alt="CrosswordGPT Puzzle Page screenshot" width="400" height="300">
 
 ## How to use the application
 
