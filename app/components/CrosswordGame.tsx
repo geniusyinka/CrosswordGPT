@@ -8,6 +8,11 @@ import ScoreDisplay from './ScoreDisplay';
 import WordFeedback from './WordFeedback';
 import { generateGrid } from '@/utils/crosswordUtils';
 
+const gridPattern = {
+  backgroundImage: 'linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 0),linear-gradient(180deg,rgba(0,0,0,.03) 1px,transparent 0)',
+  backgroundSize: '40px 40px'
+};
+
 export default function CrosswordGame() {
   const [field, setField] = useState('');
   const [difficulty, setDifficulty] = useState('');
@@ -110,7 +115,6 @@ export default function CrosswordGame() {
     let correctCount = 0;
     const correctWords: string[] = [];
 
-    // Utility function to validate coordinates
     const isValidPosition = (x: number, y: number) => {
       return x >= 0 && x < 12 && y >= 0 && y < 12 && !grid[y][x].isBlank;
     };
@@ -156,47 +160,57 @@ export default function CrosswordGame() {
   };
 
   return (
-    <div className="p-6 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-10 text-black">
-          Crossword Generator
-        </h1>
+    <div className="min-h-screen bg-white" style={gridPattern}>
+      <div className="relative py-16 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white opacity-50" />
+        <div className="container mx-auto px-4 relative">
+          <h1 className="text-5xl font-bold text-center mb-6">
+            <span className="bg-gradient-to-r from-black via-gray-700 to-black text-transparent bg-clip-text">
+              Crossword Generator
+            </span>
+          </h1>
+          {showGenerationUI && (
+            <p className="text-lg text-gray-600 text-center max-w-2xl mx-auto mb-8">
+              Create a unique crossword puzzle tailored to your interests and skill level.
+            </p>
+          )}
+        </div>
+      </div>
 
+      <div className="container mx-auto px-4 pb-16">
         {showGenerationUI && (
-          <div className="mb-10 max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto backdrop-blur-sm bg-white/90 rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="space-y-2">
-                <label className="block text-base font-bold text-black mb-2">
+                <label className="block text-base font-bold text-black">
                   Select Field
                 </label>
                 <select 
                   value={field}
                   onChange={(e) => setField(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-400 rounded-lg text-lg focus:border-black focus:ring-1 focus:ring-black font-medium text-black bg-white"
+                  className="w-full p-3 border-2 border-black/10 rounded-xl text-base focus:border-black focus:ring-1 focus:ring-black transition-all duration-300
+                    hover:border-black/30 bg-white/50 backdrop-blur-sm"
                 >
-                  <option value="" className="text-gray-600">Choose a field...</option>
+                  <option value="">Choose a field...</option>
                   {fields.map(f => (
-                    <option key={f} value={f} className="text-black font-medium">
-                      {f}
-                    </option>
+                    <option key={f} value={f}>{f}</option>
                   ))}
                 </select>
               </div>
               
               <div className="space-y-2">
-                <label className="block text-base font-bold text-black mb-2">
+                <label className="block text-base font-bold text-black">
                   Select Difficulty
                 </label>
                 <select
                   value={difficulty}
                   onChange={(e) => setDifficulty(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-400 rounded-lg text-lg focus:border-black focus:ring-1 focus:ring-black font-medium text-black bg-white"
+                  className="w-full p-3 border-2 border-black/10 rounded-xl text-base focus:border-black focus:ring-1 focus:ring-black transition-all duration-300
+                    hover:border-black/30 bg-white/50 backdrop-blur-sm"
                 >
-                  <option value="" className="text-gray-600">Choose difficulty...</option>
+                  <option value="">Choose difficulty...</option>
                   {difficulties.map(d => (
-                    <option key={d} value={d} className="text-black font-medium">
-                      {d}
-                    </option>
+                    <option key={d} value={d}>{d}</option>
                   ))}
                 </select>
               </div>
@@ -205,12 +219,15 @@ export default function CrosswordGame() {
             <button
               onClick={handleGenerate}
               disabled={!field || !difficulty || loading}
-              className="w-full bg-black text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
+              className="w-full bg-black text-white py-3 px-6 rounded-xl text-base font-semibold
+                hover:bg-gray-800 disabled:bg-gray-400 transition-all duration-300
+                transform hover:-translate-y-1 disabled:hover:transform-none
+                shadow-lg hover:shadow-xl disabled:shadow-none"
             >
               {loading ? (
-                <span className="flex items-center justify-center">
+                <span className="flex items-center justify-center gap-2">
                   Generating...
-                  <svg className="animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -223,37 +240,52 @@ export default function CrosswordGame() {
         )}
 
         {grid.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             <div className="space-y-6">
-              <div className="flex justify-center">
-                <CrosswordGrid 
-                  grid={grid} 
-                  onCellChange={handleCellChange}
-                  showAnswers={showAnswers}
-                  userAnswers={userAnswers}
-                  clues={clues}
-                />
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+                <div className="flex justify-center">
+                  <CrosswordGrid 
+                    grid={grid} 
+                    onCellChange={handleCellChange}
+                    showAnswers={showAnswers}
+                    userAnswers={userAnswers}
+                    clues={clues}
+                  />
+                </div>
               </div>
-              <div className="flex gap-4 max-w-xl mx-auto">
+              
+              <div className="flex gap-4">
                 <button
                   onClick={() => setShowAnswers(!showAnswers)}
-                  className="w-1/2 bg-gray-800 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-700 transition-colors"
+                  className="w-1/2 bg-black/80 text-white py-3 px-6 rounded-xl text-base font-semibold
+                    hover:bg-black transition-all duration-300 shadow-lg hover:shadow-xl
+                    transform hover:-translate-y-1"
                 >
                   {showAnswers ? 'Hide Answers' : 'Show Answers'}
                 </button>
                 <button
                   onClick={checkAnswers}
-                  className="w-1/2 bg-black text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors"
+                  className="w-1/2 bg-black text-white py-3 px-6 rounded-xl text-base font-semibold
+                    hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl
+                    transform hover:-translate-y-1"
                 >
                   Check Answers
                 </button>
               </div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-              <div className="space-y-8">
-                <CluesList clues={clues} direction="across" />
-                <div className="border-t border-gray-200 pt-8">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] max-h-[600px] overflow-y-auto">
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-black via-gray-700 to-black text-transparent bg-clip-text">
+                    Across
+                  </h3>
+                  <CluesList clues={clues} direction="across" />
+                </div>
+                <div className="border-t border-black/10 pt-6 space-y-4">
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-black via-gray-700 to-black text-transparent bg-clip-text">
+                    Down
+                  </h3>
                   <CluesList clues={clues} direction="down" />
                 </div>
               </div>
@@ -261,8 +293,17 @@ export default function CrosswordGame() {
           </div>
         )}
 
-        {feedback && <WordFeedback word={feedback.word} isCorrect={feedback.isCorrect} />}
-        {currentScore && <ScoreDisplay score={currentScore} />}
+        {feedback && (
+          <div className="mt-6">
+            <WordFeedback word={feedback.word} isCorrect={feedback.isCorrect} />
+          </div>
+        )}
+        
+        {currentScore && (
+          <div className="mt-6">
+            <ScoreDisplay score={currentScore} />
+          </div>
+        )}
       </div>
     </div>
   );
