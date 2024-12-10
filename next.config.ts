@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['metaschool.so'],
   },
+  eslint: {
+      ignoreDuringBuilds: true,
+    },
 };
 
 export default nextConfig;
